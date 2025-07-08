@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HostelEase - Smart Hostel Booking</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #007b5e;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .search-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .search-container input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: #e6f9f2;
+    }
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.2em;
+      color: #555;
+    }
+    #realtime {
+      padding: 40px 20px;
+    }
+    .hostel {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .hostel h3 {
+      margin-top: 0;
+    }
+    .rating {
+      color: gold;
+      font-weight: bold;
+    }
+    .recommendation {
+      color: green;
+      font-style: italic;
+    }
+    .features {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .features li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HostelEase</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#realtime">Real-Time Availability</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Stress-Free Hostel Booking</h1>
+    <p>Discover, track, and book your campus hostel easily with HostelEase.</p>
+  </section>
+
+  <section id="realtime">
+    <h2 style="text-align:center;">Real-Time Hostel Availability</h2>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search by hostel or location...">
+    </div>
+    <div id="hostelList"></div>
+  </section>
+
+  <section id="contact" style="background:#fff; padding:40px 20px; text-align:center;">
+    <h2>Contact Us on 0553149906 or 0531300923</h2>
+    <p>Email: <strong>dariousdonkor@stu.ucc.edu.gh</strong></p>
+  </section>
+
+  <footer style="text-align:center; padding:20px; background-color:#007b5e; color:white;">
+    <p>&copy; 2025 HostelEase. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const hostels = [
+      { name: "Green View Hostel", location: "Near Science Gate", available: 12, rating: 4.2, recommendation: "Highly recommended for first-year students", features: ["Wi-Fi", "24/7 Security", "Reading Room", "Laundry Services"] },
+      { name: "Unity Hall Residence", location: "Central Campus", available: 5, rating: 3.8, recommendation: "Close to lecture halls and library", features: ["Cafeteria", "Gym", "Backup Power", "Transport Shuttle"] },
+      { name: "Serene Stay Hostel", location: "Behind Engineering Faculty", available: 9, rating: 4.8, recommendation: "Perfect for quiet and focused study", features: ["Study Cubicles", "Quiet Zones", "Balcony Rooms", "Spacious Compound"] },
+      { name: "Lighthouse Residence", location: "South Wing", available: 15, rating: 4.5, recommendation: "Great view and access to open fields", features: ["Swimming Pool", "Basketball Court", "Wi-Fi", "Shared Kitchen"] },
+      { name: "TechVille Hostel", location: "Opposite ICT Centre", available: 8, rating: 4.1, recommendation: "Best for tech enthusiasts", features: ["Tech Lab", "High-speed Internet", "Smart Locks", "Solar Power"] },
+      { name: "Exorxia Hostel", location: "Amamoma", available: 12, rating: 4.2, recommendation: "Great for active student life", features: ["Wi-Fi", "24/7 Security", "Air Conditioning", "Laundry"] },
+      { name: "Sterner Hostel", location: "Amamoma", available: 5, rating: 3.8, recommendation: "Close to lecture halls and library", features: ["Cafeteria", "Gym", "Backup Power", "Transport Shuttle"] },
+      { name: "Maplins", location: "School Bus Road", available: 9, rating: 4.8, recommendation: "Ideal for med students", features: ["Study Cubicles", "Quiet Zones", "Balcony Rooms", "CCTV Surveillance"] },
+      { name: "Executive Hostel", location: "School Bus Road", available: 15, rating: 4.5, recommendation: "Luxurious and modern living", features: ["Swimming Pool", "Basketball Court", "Wi-Fi", "Shared Kitchen"] },
+      { name: "Joennel Hostel", location: "Amamoma", available: 8, rating: 4.1, recommendation: "Modern and tech-friendly", features: ["Tech Lab", "High-speed Internet", "Smart Locks", "Solar Power"] },
+      { name: "Pink Hostel", location: "Amamoma", available: 5, rating: 3.8, recommendation: "Convenient for nursing students", features: ["Cafeteria", "Gym", "Backup Power", "Transport Shuttle"] },
+      { name: "Kwesi Mensah Hostel", location: "Kwaprow", available: 7, rating: 4.3, recommendation: "Affordable and secure", features: ["Private Bathrooms", "Wi-Fi", "Security Cameras", "Laundry"] },
+      { name: "Campus Hill", location: "Kwasipra", available: 11, rating: 4.4, recommendation: "Great for postgrads", features: ["Spacious Rooms", "Study Area", "Hot Water", "Wi-Fi"] },
+      { name: "Legacy Tower", location: "Science Market", available: 6, rating: 4.0, recommendation: "Proximity to science labs", features: ["Elevator", "24/7 Security", "Wi-Fi", "Air Conditioning"] }
+    ];
+
+    function renderHostels(filter = "") {
+      const list = document.getElementById("hostelList");
+      list.innerHTML = "";
+      const filtered = hostels.filter(h =>
+        h.name.toLowerCase().includes(filter.toLowerCase()) ||
+        h.location.toLowerCase().includes(filter.toLowerCase())
+      );
+      filtered.forEach(h => {
+        const div = document.createElement("div");
+        div.className = "hostel";
+        div.innerHTML = `
+          <h3>${h.name}</h3>
+          <p><strong>Location:</strong> ${h.location}</p>
+          <p><strong>Available Rooms:</strong> ${h.available}</p>
+          <p class="rating">Rating: ★★★★☆ (${h.rating}/5)</p>
+          <p class="recommendation">${h.recommendation}</p>
+          <ul class="features">
+            <strong>Features:</strong>
+            ${h.features.map(f => `<li>${f}</li>`).join("")}
+          </ul>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      renderHostels(e.target.value);
+    });
+
+    window.onload = () => renderHostels();
+  </script>
+</body>
+</html>
